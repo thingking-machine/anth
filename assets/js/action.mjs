@@ -3,7 +3,8 @@ import {
   platoTextToPlatoHtml,
   platoHtmlToCmj,
   CmjToPlatoText,
-  llmSoupToText
+  llmSoupToText,
+  platoHtmlToAnth
 } from './utilities.mjs';
 import {
   showTokenPopup,
@@ -305,37 +306,40 @@ class MachineApp {
     
     try {
       const cmjMessages = platoHtmlToCmj(htmlContent);
+      const anthMessages = platoHtmlToAnth(htmlContent);
+      console.log('Anth messages:', anthMessages);
+      
       const workerPayload = {
         config: this.settings.machine,
         settings: this.settings.llm,
-        messages: cmjMessages
+        messages: anthMessages
       };
       
       console.log('Launching LLM worker with payload:', workerPayload);
-      const llmWorker = new Worker(this.settings.workerUrl);
-      
-      llmWorker.onmessage = (e) => {
-        this.elements.loadingOverlay.style.display = 'none';
-        console.log('Main thread: Message received from worker:', e.data);
-        if (e.data.type === 'success') {
-          this._processLlmResponse(e.data.data, cmjMessages);
-        } else if (e.data.type === 'error') {
-          console.error('Main thread: Error message from worker:', e.data.error);
-          alert(`Worker reported an error: ${e.data.error}`);
-        }
-        llmWorker.terminate(); // Clean up the worker
-      };
-      
-      llmWorker.onerror = (error) => {
-        this.elements.loadingOverlay.style.display = 'none';
-        console.error('Main thread: An error occurred with the worker script:', error.message, error);
-        alert(`Failed to initialize or run worker: ${error.message}`);
-        llmWorker.terminate(); // Clean up the worker
-      };
-      
-      llmWorker.postMessage(workerPayload);
-      console.log('Main thread: Worker launched and payload sent.');
-      
+      // const llmWorker = new Worker(this.settings.workerUrl);
+      //
+      // llmWorker.onmessage = (e) => {
+      //   this.elements.loadingOverlay.style.display = 'none';
+      //   console.log('Main thread: Message received from worker:', e.data);
+      //   if (e.data.type === 'success') {
+      //     this._processLlmResponse(e.data.data, cmjMessages);
+      //   } else if (e.data.type === 'error') {
+      //     console.error('Main thread: Error message from worker:', e.data.error);
+      //     alert(`Worker reported an error: ${e.data.error}`);
+      //   }
+      //   llmWorker.terminate(); // Clean up the worker
+      // };
+      //
+      // llmWorker.onerror = (error) => {
+      //   this.elements.loadingOverlay.style.display = 'none';
+      //   console.error('Main thread: An error occurred with the worker script:', error.message, error);
+      //   alert(`Failed to initialize or run worker: ${error.message}`);
+      //   llmWorker.terminate(); // Clean up the worker
+      // };
+      //
+      // llmWorker.postMessage(workerPayload);
+      // console.log('Main thread: Worker launched and payload sent.');
+      //
     } catch (e) {
       this.elements.loadingOverlay.style.display = 'none';
       console.error('Failed to process dialogue or communicate with the worker:', e);

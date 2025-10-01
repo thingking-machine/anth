@@ -447,8 +447,7 @@ export function platoHtmlToAnth(platoHtml) {
     
     messages.push({
       role: role,
-      name: speaker,
-      content: finalUtterance
+      content: `${speaker}: ${finalUtterance}`
     });
   });
   
