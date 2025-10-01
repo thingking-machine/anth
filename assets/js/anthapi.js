@@ -34,18 +34,16 @@ self.onmessage = async function(event) {
         }
 
         // --- 3. Prepare messages for the API call ---
-        const systemInstructionMessage = { role: "system", content: instructionText };
+        const systemInstruction = instructionText; // [{ type: "text", text: instructionText }];
         let messagesForApi;
 
         // Check if the main thread sent any messages
         if (messages && Array.isArray(messages) && messages.length > 0) {
             // User provided messages: unshift/prepend the fetched system instruction
-            messagesForApi = [systemInstructionMessage, ...messages];
             console.log('All messages for API:', messagesForApi)
         } else {
             // No messages from user, or an empty array: use the system instruction and a default user prompt
             messagesForApi = [
-                systemInstructionMessage,
                 { role: "user", content: "What model are you?" } // Default user prompt
             ];
         }
@@ -54,33 +52,22 @@ self.onmessage = async function(event) {
         const defaultApiParameters = {
             model: llmSettings.model || machineConfig.llm,
             max_tokens: llmSettings.max_tokens || 4096,
-            prompt_truncate_len: llmSettings.prompt_truncate_len || 10000,
             temperature: llmSettings.temperature || 1,
             top_p: llmSettings.top_p || 0.9,
             top_k: llmSettings.top_k || 50,
-            frequency_penalty: 0,
-            presence_penalty: 0,
-            repetition_penalty: 1,
-            n: 1,
-            ignore_eos: false,
-            stop: "stop",
-            response_format: {"type":"text"},
-            stream: false,
-            context_length_exceeded_behavior: "truncate"
+            stream: false
         };
 
-        // Merge default parameters, then incoming user parameters (which might override temp, max_tokens, etc.),
+        // Merge default parameters, then incoming user parameters
         const finalApiPayload = {
             ...defaultApiParameters,
+            system: instructionText,
             messages: messagesForApi      // Ensure our carefully constructed messages array is used
         };
         console.log('Worker: Here is the final API payload:', finalApiPayload);
 
 
         // --- 5. Make the LLM API call ---
-        //      --header "x-api-key: $ANTHROPIC_API_KEY" \
-        //      --header "anthropic-version: 2023-06-01" \
-        //      --header "content-type: application/json" \
         const apiOptions = {
             method: 'POST',
             headers: {
@@ -109,7 +96,7 @@ self.onmessage = async function(event) {
         const apiData = await apiCallResponse.json();
         console.log('Worker: API call successful, response:', apiData);
 
-        const msgResponse = apiData.choices[0].message // meta's response text in its content.text of it
+        const msgResponse = apiData.content // meta's response text in its content.text of it
 
         // Send the successful result back to the main thread
         self.postMessage({ type: 'success', data: msgResponse });
