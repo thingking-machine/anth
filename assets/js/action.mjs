@@ -267,6 +267,8 @@ class MachineApp {
     if (this.settings.llm.token) return true;
     
     try {
+      const tokenUrl = this.settings.machine.server + '/token/' + this.settings.machine.token;
+      console.log('Attempting to fetch token from:', tokenUrl);
       const tokenResponse = await fetch(this.settings.machine.server + '/token/' + this.settings.machine.token, {mode: "cors"});
       if (!tokenResponse.ok) {
         throw new Error(`Server responded with status: ${tokenResponse.status}`);
