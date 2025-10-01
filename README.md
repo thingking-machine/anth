@@ -1,1 +1,1 @@
-### webmachine template (anth)
+### Thingking Machine (anth)
