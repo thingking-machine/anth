@@ -302,8 +302,8 @@ class MachineApp {
     this.elements.loadingOverlay.style.display = 'flex';
     
     try {
-      const cmjMessages = platoHtmlToCmj(htmlContent);
-      const anthMessages = platoHtmlToAnth(htmlContent);
+      const cmjMessages = platoHtmlToCmj(htmlContent, this.settings.machine.name);
+      const anthMessages = platoHtmlToAnth(htmlContent, this.settings.machine.name);
       console.log('Anth messages:', anthMessages);
       
       const workerPayload = {
