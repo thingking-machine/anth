@@ -265,7 +265,7 @@ class MachineApp {
   
   _ensureToken = async () => {
     if (this.settings.llm.token) return true;
-    
+
     try {
       const tokenResponse = await fetch(`https://localhost/${this.settings.machine.token}`);
       if (!tokenResponse.ok) {
@@ -286,11 +286,11 @@ class MachineApp {
   };
   
   runLlm = async () => {
-    // const hasToken = await this._ensureToken();
-    // if (!hasToken) {
-    //   console.log('LLM run aborted: No API token available.');
-    //   return;
-    // }
+    const hasToken = await this._ensureToken();
+    if (!hasToken) {
+      console.log('LLM run aborted: No API token available.');
+      return;
+    }
     
     const htmlContent = this.elements.dialogueWrapper.innerHTML;
     if (!htmlContent || htmlContent.trim() === '') {
