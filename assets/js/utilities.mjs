@@ -436,7 +436,7 @@ export function platoHtmlToAnth(platoHtml) {
     if (typeof machineConfig !== 'undefined' && machineConfig && typeof machineConfig.name === 'string' && machineConfig.name.trim() !== '') {
       assistantNameUpper = machineConfig.name.toUpperCase();
     } else {
-      // console.warn("machineConfig.name not available for role assignment in platoHtmlToCmj.");
+      console.warn("machineConfig.name not available for role assignment in platoHtmlToCmj.");
     }
     
     if (assistantNameUpper && speaker.toUpperCase() === assistantNameUpper) {
