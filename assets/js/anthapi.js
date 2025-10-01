@@ -75,7 +75,8 @@ self.onmessage = async function(event) {
                 'anthropic-version': '2023-06-01',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(finalApiPayload)
+            body: JSON.stringify(finalApiPayload),
+            mode: "cors"
         };
 
         console.log('Worker: Making API call to Fireworks API with payload:', finalApiPayload);
