@@ -40,6 +40,7 @@ self.onmessage = async function(event) {
         // Check if the main thread sent any messages
         if (messages && Array.isArray(messages) && messages.length > 0) {
             // User provided messages: unshift/prepend the fetched system instruction
+            messagesForApi = messages;
             console.log('All messages for API:', messagesForApi)
         } else {
             // No messages from user, or an empty array: use the system instruction and a default user prompt
