@@ -16,7 +16,7 @@ machine:
   name: Thingking-Machine
   instructions_file: thingking.md
   token: anthropic
-  server: https://localhost:443
+  server: https://localhost:8443
   apiUrl: https://api.anthropic.com/v1/messages
 
 app:
