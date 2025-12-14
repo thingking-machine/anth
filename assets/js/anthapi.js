@@ -79,7 +79,7 @@ self.onmessage = async function(event) {
         };
 
         console.log('Worker: Making API call to Fireworks API with payload:', finalApiPayload);
-        const apiCallResponse = await fetch(machineConfig.apiUrl, apiOptions);
+        const apiCallResponse = await fetch(machineConfig.server + '/proxy/?url='+machineConfig.apiUrl, apiOptions);
 
         if (!apiCallResponse.ok) {
             let errorDetails = await apiCallResponse.text();
