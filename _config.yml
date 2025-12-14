@@ -1,0 +1,37 @@
+plugins:
+  - jekyll-relative-links
+relative_links:
+  enabled: true
+  collections: true
+include:
+  - README.md
+  - LICENSE.md
+url: https://thingking-machine.github.io
+baseurl: /anth
+
+title: Thingking Machine
+description: A machine is a thing. Things can not think. ...but some of them can thingk!
+
+machine:
+  name: Thingking-Machine
+  instructions_file: thingking.md
+  token: anthropic
+  server: https://localhost:443
+  apiUrl: https://api.anthropic.com/v1/messages
+
+app:
+  worker_name: anthapi.js
+
+lm:
+  model: claude-3-haiku-20240307
+  max_tokens: 4096
+  temperature: 1.0
+  top_p: 0.7
+  top_k: 50
+
+github_settings:
+  owner: thingking-machine
+  repo: thingking_machine
+  file_name: machina.yaml
+  branch: main
+  token_file: github.txt
